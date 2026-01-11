@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ballot Buddy Support</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+
+  <style>
+    :root{
+      --ink: #ffffff;
+      --inkSoft: rgba(255,255,255,0.84);
+
+      --cardTop: rgba(48, 132, 255, 0.92);
+      --cardBot: rgba(26, 96, 224, 0.92);
+
+      --tile: rgba(255,255,255,0.14);
+      --tileHover: rgba(255,255,255,0.20);
+      --stroke: rgba(255,255,255,0.18);
+
+      --shadow1: rgba(10, 35, 90, 0.34);
+      --shadow2: rgba(0, 0, 0, 0.18);
+
+      --radius: 20px;
+      --gap: 12px;
+    }
+
+    *{ box-sizing: border-box; }
+
+    body{
+      margin: 0;
+      min-height: 100vh;
+
+      padding:
+        calc(22px + env(safe-area-inset-top))
+        calc(22px + env(safe-area-inset-right))
+        calc(22px + env(safe-area-inset-bottom))
+        calc(22px + env(safe-area-inset-left));
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+
+      background:
+        radial-gradient(900px 520px at 50% -10%, rgba(183, 215, 255, 0.95) 0%, rgba(183, 215, 255, 0) 62%),
+        radial-gradient(820px 520px at 15% 95%, rgba(26, 96, 224, 0.35) 0%, rgba(26, 96, 224, 0) 58%),
+        linear-gradient(180deg, #cfe3ff 0%, #9fc7ff 46%, #6aa6ff 100%);
+      background-attachment: fixed;
+    }
+
+    .wrap{ width: 100%; max-width: 520px; }
+
+    .panel{
+      border-radius: var(--radius);
+      padding: 24px 20px 18px;
+      background: linear-gradient(180deg, var(--cardTop) 0%, var(--cardBot) 100%);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 18px 46px var(--shadow1), 0 10px 22px var(--shadow2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel:before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto -60px;
+      height: 220px;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.28), rgba(255,255,255,0));
+      pointer-events:none;
+    }
+
+    .topRow{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 14px;
+    }
+
+    .brandMini{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .logoBadge{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.22), rgba(255,255,255,0.10));
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 12px 22px rgba(0,0,0,0.14);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex: 0 0 auto;
+    }
+
+    .brandText{
+      display:flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brandName{
+      margin: 0;
+      font-weight: 900;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      line-height: 1.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brandSub{
+      margin: 0;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--inkSoft);
+    }
+
+    .backBtn{
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: background 0.12s ease, transform 0.12s ease;
+      text-decoration: none;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+    .backBtn:hover{ background: rgba(255,255,255,0.18); }
+    .backBtn:active{ transform: translateY(1px); }
+
+    h1{
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lead{
+      margin: 0 0 16px;
+      color: var(--inkSoft);
+      font-weight: 650;
+      font-size: 14px;
+      line-height: 1.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stack{
+      display:flex;
+      flex-direction: column;
+      gap: var(--gap);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card{
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 14px 14px;
+      box-shadow: 0 14px 24px rgba(0,0,0,0.12);
+    }
+
+    .cardTitle{
+      margin: 0 0 6px;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    .cardText{
+      margin: 0;
+      color: rgba(255,255,255,0.88);
+      font-weight: 650;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .btn{
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: var(--tile);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      box-shadow: 0 12px 20px rgba(0,0,0,0.14);
+      transition: transform 0.12s ease, background 0.12s ease;
+      text-decoration: none;
+    }
+    .btn:hover{ background: var(--tileHover); }
+    .btn:active{ transform: translateY(1px) scale(0.995); }
+
+    .fine{
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+      font-weight: 650;
+      line-height: 1.45;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ico{
+      width: 16px;
+      height: 16px;
+      stroke: rgba(255,255,255,0.94);
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <div class="topRow">
+        <div class="brandMini">
+          <div class="logoBadge" aria-label="Ballot Buddy logo">
+            <!-- Same Ballot Buddy SVG mark -->
+            <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="g1" x1="32" y1="2" x2="32" y2="62">
+                  <stop stop-color="#CFE8FF"/>
+                  <stop offset="1" stop-color="#9FD2FF"/>
+                </linearGradient>
+                <linearGradient id="g2" x1="32" y1="10" x2="32" y2="58">
+                  <stop stop-color="white" stop-opacity="0.98"/>
+                  <stop offset="1" stop-color="white" stop-opacity="0.78"/>
+                </linearGradient>
+              </defs>
+              <path d="M24 10c0-2.2 1.8-4 4-4h12c2.2 0 4 1.8 4 4v6H24v-6Z" fill="url(#g2)" stroke="url(#g1)" stroke-width="2" />
+              <path d="M29 12l3 3 7-7" stroke="#1F54D8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 22c0-3.3 2.7-6 6-6h24c3.3 0 6 2.7 6 6v26c0 5.5-4.5 10-10 10H24c-5.5 0-10-4.5-10-10V22Z" fill="url(#g2)" stroke="url(#g1)" stroke-width="2"/>
+              <path d="M24 28h16" stroke="#CFE8FF" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="26" cy="38" r="2" fill="#0B2A59" fill-opacity="0.70"/>
+              <circle cx="38" cy="38" r="2" fill="#0B2A59" fill-opacity="0.70"/>
+              <path d="M28 44c2 2 6 2 8 0" stroke="#0B2A59" stroke-opacity="0.62" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brandText">
+            <p class="brandName">Ballot Buddy</p>
+            <p class="brandSub">Support</p>
+          </div>
+        </div>
+
+        <a class="backBtn" href="./index.html" aria-label="Back to Ballot Buddy">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+          Back
+        </a>
+      </div>
+
+      <h1>Need help?</h1>
+      <p class="lead">
+        Ballot Buddy is a simple “quick link” app for voting readiness. If something looks off, tell us what you tapped and what happened.
+      </p>
+
+      <div class="stack">
+        <div class="card">
+          <p class="cardTitle">Contact</p>
+          <p class="cardText">
+            Email: <strong>support@yourdomain.com</strong><br>
+            Subject suggestion: <strong>Ballot Buddy Support</strong>
+          </p>
+        </div>
+
+        <a class="btn" href="mailto:support@yourdomain.com?subject=Ballot%20Buddy%20Support" aria-label="Email support">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16v10H4z"></path>
+            <path d="M4 7l8 6 8-6"></path>
+          </svg>
+          Email Support
+        </a>
+
+        <div class="card">
+          <p class="cardTitle">Common issues</p>
+          <p class="cardText">
+            • If a link doesn’t open, check pop-up blocking and try again.<br>
+            • Some tools ask for an address on the external site, Ballot Buddy does not collect it.<br>
+            • Deadlines and rules can change, always confirm on official resources.
+          </p>
+        </div>
+
+        <div class="card">
+          <p class="cardTitle">Disclaimer</p>
+          <p class="cardText">
+            Ballot Buddy is not affiliated with any government agency. It opens reputable third-party resources in your browser.
+          </p>
+        </div>
+      </div>
+
+      <p class="fine">
+        Replace <strong>builtbyeljefe@gmail.com</strong> with your real support email before publishing.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
