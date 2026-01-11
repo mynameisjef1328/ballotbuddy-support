@@ -102,6 +102,17 @@
       justify-content:center;
       align-items:center;
       flex: 0 0 auto;
+      overflow: hidden;
+    }
+
+    /* NEW: app icon image inside badge */
+    .appLogo{
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+      image-rendering: auto;
     }
 
     .brandText{
@@ -143,6 +154,7 @@
       align-items:center;
       gap: 8px;
       flex: 0 0 auto;
+      white-space: nowrap;
     }
     .backBtn:hover{ background: rgba(255,255,255,0.18); }
     .backBtn:active{ transform: translateY(1px); }
@@ -219,6 +231,12 @@
 
     a{ color: rgba(255,255,255,0.92); }
     a:hover{ color: #ffffff; }
+
+    @media (max-width: 380px){
+      .wrap{ max-width: 480px; }
+      .panel{ padding: 22px 16px 16px; }
+      .backBtn{ padding: 9px 10px; }
+    }
   </style>
 </head>
 
@@ -228,26 +246,8 @@
       <div class="topRow">
         <div class="brandMini">
           <div class="logoBadge" aria-label="Ballot Buddy logo">
-            <!-- Same Ballot Buddy SVG mark -->
-            <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <linearGradient id="g1" x1="32" y1="2" x2="32" y2="62">
-                  <stop stop-color="#CFE8FF"/>
-                  <stop offset="1" stop-color="#9FD2FF"/>
-                </linearGradient>
-                <linearGradient id="g2" x1="32" y1="10" x2="32" y2="58">
-                  <stop stop-color="white" stop-opacity="0.98"/>
-                  <stop offset="1" stop-color="white" stop-opacity="0.78"/>
-                </linearGradient>
-              </defs>
-              <path d="M24 10c0-2.2 1.8-4 4-4h12c2.2 0 4 1.8 4 4v6H24v-6Z" fill="url(#g2)" stroke="url(#g1)" stroke-width="2" />
-              <path d="M29 12l3 3 7-7" stroke="#1F54D8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M14 22c0-3.3 2.7-6 6-6h24c3.3 0 6 2.7 6 6v26c0 5.5-4.5 10-10 10H24c-5.5 0-10-4.5-10-10V22Z" fill="url(#g2)" stroke="url(#g1)" stroke-width="2"/>
-              <path d="M24 28h16" stroke="#CFE8FF" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round"/>
-              <circle cx="26" cy="38" r="2" fill="#0B2A59" fill-opacity="0.70"/>
-              <circle cx="38" cy="38" r="2" fill="#0B2A59" fill-opacity="0.70"/>
-              <path d="M28 44c2 2 6 2 8 0" stroke="#0B2A59" stroke-opacity="0.62" stroke-width="3" stroke-linecap="round"/>
-            </svg>
+            <!-- NEW: icon image (make sure this file exists in /assets/) -->
+            <img class="appLogo" src="./assets/ballot-buddy-icon.png" alt="Ballot Buddy logo">
           </div>
           <div class="brandText">
             <p class="brandName">Ballot Buddy</p>
@@ -255,7 +255,8 @@
           </div>
         </div>
 
-        <a class="backBtn" href="./index.html" aria-label="Back to Ballot Buddy">
+        <!-- IMPORTANT: Update this URL if your main app URL is different -->
+        <a class="backBtn" href="https://mynameisjef1328.github.io/ballotbuddy/" aria-label="Back to Ballot Buddy">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M15 18l-6-6 6-6"></path>
           </svg>
@@ -272,7 +273,7 @@
         <div class="card">
           <p class="cardTitle">What Ballot Buddy collects</p>
           <p class="cardText">
-            <strong>Nothing.</strong> Ballot Buddy does not require an account, does not collect your name, email, address, party, or any other personal data.
+            <strong>Nothing.</strong> Ballot Buddy does not require an account, and it does not collect your name, email, address, party affiliation, or any other personal data.
           </p>
         </div>
 
@@ -294,14 +295,15 @@
         <div class="card">
           <p class="cardTitle">Data storage</p>
           <p class="cardText">
-            Ballot Buddy does not store personal data. If you host this page on a website (GitHub Pages or similar), the hosting provider may collect standard server logs (like IP address and user agent) as part of normal website operation.
+            Ballot Buddy does not store personal data.
+            If you host this privacy page on a website (GitHub Pages or similar), the hosting provider may collect standard server logs (like IP address and user agent) as part of normal website operation.
           </p>
         </div>
 
         <div class="card">
           <p class="cardTitle">Contact</p>
           <p class="cardText">
-            For privacy questions, email: <strong>privacy@yourdomain.com</strong>
+            For privacy questions, email: <strong>builtbyeljefe@gmail.com</strong>
           </p>
         </div>
 
@@ -313,10 +315,9 @@
         </div>
       </div>
 
-<p class="fine">
-  Ballot Buddy opens trusted resources in your browser, it does not collect personal data.
-</p>
-      
+      <p class="fine">
+        Ballot Buddy opens trusted resources in your browser, it does not collect personal data.
+      </p>
     </div>
   </div>
 </body>
